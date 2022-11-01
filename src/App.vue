@@ -1,28 +1,33 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <Header></Header>
+    <!-- 路由组件出口的地方 -->
+    <router-view></router-view>
+    <!-- 在Home 和Search显示，登录和注册隐藏 -->
+    <!-- <Footer
+      v-show="$route.path == '/home' || $route.path == '/search'"
+    ></Footer> -->
+    <Footer v-show="$route.meta.show"></Footer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Header,
+    Footer,
+  },
+  mounted() {
+    //通知Vuex 发请求，获取数据，并存储于仓库中
+    //派发categoryList方法
+    this.$store.dispatch("categoryList");
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
 </style>
