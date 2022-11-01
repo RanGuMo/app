@@ -78,7 +78,7 @@ import { mapState } from "vuex";
 import throttle from "lodash/throttle";
 
 export default {
-  name: "typeNav",
+  name: "TypeNav",
   //组件挂载完毕：向服务器发请求
   mounted() {
     //通知Vuex 发请求，获取数据，并存储于仓库中

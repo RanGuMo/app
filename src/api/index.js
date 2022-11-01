@@ -30,4 +30,7 @@ export const reqGetFloorList = () => mockRequests.get('/floor');
 //     "trademark": "4:小米"
 //   }
 //当这个接口在获取搜索模块数据时，向服务器传递一个默认参数【至少是一个空对象】
-export const reqGetSearchInfo = (params)=>requests({url:"/list",method:"post",data:params})
+export const reqGetSearchInfo = (params) => requests({ url: "/list", method: "post", data: params })
+
+//获取产品详情信息的接口 URL:/api/item/{skuId} 请求方式：get
+export const reqGoodsInfo =(skuId)=>requests({url:`/item/${skuId}`,method:'get'})
