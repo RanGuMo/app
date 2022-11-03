@@ -4,6 +4,7 @@ import axios from "axios";
 import nprogress from 'nprogress'
 //引入进度条的样式
 import 'nprogress/nprogress.css';
+import store from '@/store'; //引入stroe 是为了获取store.state.detail.uuid_token,给请求头携带过去
 
 //axios.create方法执行,其实返回一个axios和request一样的
 let requests = axios.create({
@@ -18,6 +19,10 @@ requests.interceptors.request.use(config => {
     //请求拦截器:请求头【header】,请求头能否给服务器携带参数
     //请求拦截器：其实项目中还有一个重要的作用,给服务器携带请求们的公共的参数
     //进度条开始
+    if (store.state.detail.uuid_token) {
+        //请求头添加一个字段（userTempId），和后端商量好的，供我传值，后端读值
+        config.headers.userTempId = store.state.detail.uuid_token;
+    }
     nprogress.start();
     return config;
 });

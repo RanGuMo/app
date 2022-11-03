@@ -102,12 +102,24 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @change="changeSkuNum"
+                />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : (skuNum = 1)"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <!-- 以前的路由跳转，a跳到b ，这里是在加入购物车，进行路由跳转之前，发请求，
+                把你购买的产品的信息  通过请求的形式通知服务器，服务器进行相应的存储 -->
+                <a @click="addShopCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -351,7 +363,13 @@ import Zoom from "./Zoom/Zoom";
 import { mapGetters } from "vuex";
 export default {
   name: "Detail",
-
+  data() {
+    return {
+      //购买的数量
+      skuNum: 1,
+      
+    };
+  },
   components: {
     ImageList,
     Zoom,
@@ -369,13 +387,50 @@ export default {
   },
   methods: {
     //产品的售卖属性值切换高亮
-    changeActive(SaleAttrValue,arr) {
+    changeActive(SaleAttrValue, arr) {
       //遍历全部售卖属性值isChecked为0,就没有高亮了
-      arr.forEach(item => {
-        item.isChecked='0';
+      arr.forEach((item) => {
+        item.isChecked = "0";
       });
       //点击的那个售卖属性值设为1，就高亮了（排他操作）
-      SaleAttrValue.isChecked='1';
+      SaleAttrValue.isChecked = "1";
+    },
+    //表单元素修改产品的个数
+    changeSkuNum(event) {
+      //用户输入的文本 *1
+      let value = event.target.value * 1;
+      //如果用户输入进来的内容是非法的,出现NaN或者小于1
+      if (isNaN(value) || value < 1) {
+        this.skuNum = 1;
+      } else {
+        //正常输入大于1[大于1的整数且不能出现小数]
+        this.skuNum = parseInt(value);
+      }
+    },
+    //加入购物车的回调
+    async addShopCart() {
+      //发请求，将产品加入到数据库（通知服务器）
+      try {
+        await this.$store.dispatch("addOrUpdateShopCart", {
+          skuId: this.$route.params.skuid,
+          skuNum: this.skuNum,
+        });
+        //路由跳转
+       
+        //进行路由跳转的时候，还需要将产品信息带给下一级的路由组件
+        //简单的数据skuNum，通过query形式传递
+        //复杂的数据skuInfo ，通过会话存储（不持久化，会话结束，数据消失）
+        // 本地存储| 会话存储 ，一般存储的是字符串
+         sessionStorage.setItem('SKUINFO',JSON.stringify(this.skuInfo));
+         this.$router.push({name:'addcartsuccess',query:{skuNum:this.skuNum}});
+
+        //方式二：（地址栏中传递对象，会转换为字符串，不好看）
+        //this.router.push({name:'addcartsuccess',query:{skuInfo:this.skuInfo,skuNum:this.skuNum}});
+        
+
+      } catch (error) {
+        alert(error.message);
+      }
     },
   },
 };
