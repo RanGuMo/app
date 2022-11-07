@@ -26,7 +26,9 @@ const actions = {
 };
 //getters:理解为计算属性，用于简化仓库数据，让组件获取仓库的数据更加方便
 const getters = {
-
+    cartList(state) {
+        return state.cartList[0] || {};
+  },
 
 };
 
