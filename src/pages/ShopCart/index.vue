@@ -21,6 +21,7 @@
               type="checkbox"
               name="chk_list"
               :checked="cart.isChecked == 1"
+              @change="updateChecked(cart, $event)"
             />
           </li>
           <li class="cart-list-con2">
@@ -59,7 +60,7 @@
             <span class="sum">{{ cart.skuPrice * cart.skuNum }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a class="sindelet" @click="deleteCartById(cart)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -92,6 +93,8 @@
 
 <script>
 import { mapGetters } from "vuex";
+//按需引入节流插件
+import throttle from "lodash/throttle";
 export default {
   name: "ShopCart",
   mounted() {
@@ -102,8 +105,9 @@ export default {
     getData() {
       this.$store.dispatch("getCartList");
     },
-    //修改某一个产品的个数
-    async handler(type, disNum, cart) {
+    //修改某一个产品的个数[节流]
+    handler: throttle(async function (type, disNum, cart) {
+      //使用节流
       //type：为了区分这三个元素
       // disNum：变化量
       //cart :哪一个产品【身上的id】
@@ -134,7 +138,6 @@ export default {
           }
           break;
       }
-
       try {
         //派发action
         //代表修改成功
@@ -145,6 +148,32 @@ export default {
         //再一次获取服务器最新的数据进行展示
         this.getData();
       } catch (error) {}
+    }, 1000),
+    //删除某一个产品的操作
+    async deleteCartById(cart) {
+      try {
+        //如果删除成功，再次发起请求，获取新的数据进行展示
+        await this.$store.dispatch("deleteCartListBySkuId", cart.skuId);
+        this.getData();
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+    //修改某一个产品的勾选状态
+    async updateChecked(cart, event) {
+      //带给服务器的参数isChecked 不是布尔值，而是 0 | 1
+
+      try {
+        //console.log(cart, event);
+        //如果修改状态成功，再次发起请求，获取服务器的数据进行展示
+        let isChecked = event.target.checked ? 1 : 0;
+
+        await this.$store.dispatch("updateCheckedById",{skuId:cart.skuId, isChecked});
+        this.getData();
+      } catch (error) {
+        //如果失败，则提示
+        alert(error.message);
+      }
     },
   },
   computed: {
