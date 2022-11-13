@@ -42,7 +42,24 @@ const actions = {
         } else {
              return Promise.reject(new Error('fail'));
         }
-   },
+    },
+    //删除勾选的商品
+    deleteAllCheckedCart({ dispatch, getters }) {
+        //contex：就是当前的小仓库，commit【提交mutation修改state】 getters【计算属性】 dispatch【派发action】 state【当前仓库的数据】
+        let PromiseAll = [];
+        //console.log(getters);
+        getters.cartList.cartInfoList.forEach(item => {
+           let result = item.isChecked == 1 ? dispatch('deleteCartListBySkuId', item.skuId) : '';
+           //将每一次返回的result 添加到数组中
+            PromiseAll.push(result);
+            
+        });
+        // 只要所有的 result 都成功，返回结果即为成功
+        // 如果有一个失败，返回即为失败
+        //console.log(PromiseAll);
+        return Promise.all(PromiseAll);
+    },
+       
   
 };
 //getters:理解为计算属性，用于简化仓库数据，让组件获取仓库的数据更加方便
