@@ -25,6 +25,7 @@ export default {
     //通知Vuex 发请求，获取数据，并存储于仓库中
     //派发categoryList方法
     this.$store.dispatch("categoryList");
+    
   },
 };
 </script>
