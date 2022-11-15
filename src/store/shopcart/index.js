@@ -59,6 +59,19 @@ const actions = {
         //console.log(PromiseAll);
         return Promise.all(PromiseAll);
     },
+    // 修改全部产品的状态
+    updateAllCartIsChecked({dispatch,state},isChecked) {
+        //console.log(state, isChecked);
+        // 定义一个数组
+        let promiseAll = [];
+        state.cartList[0].cartInfoList.forEach(item => {
+            let promise = dispatch('updateCheckedById', { skuId: item.skuId, isChecked });
+            promiseAll.push(promise);
+        });
+        //最终返回的结果
+        return Promise.all(promiseAll);
+
+    }
        
   
 };
