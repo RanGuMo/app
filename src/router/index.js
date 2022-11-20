@@ -87,8 +87,17 @@ router.beforeEach(async (to, from, next) => {
             
         }
     } else {
-        // 未登录，暂时没有处理完毕
-         next();
+        // 未登录，不能去交易相关的页面[trade],不能去支付相关【pay|paysuccess】，不能去个人中心【center】
+        // 而是要跳转到登录页面
+        let toPath = to.path;
+        if (toPath.indexOf('/trade') != -1 || toPath.indexOf('/pay') != -1 || toPath.indexOf('/center') != -1) {
+            // 把未登录的时候 想去而没有去成的信息。保存到地址栏中【路由】
+            next('/login?redirect='+toPath);
+        } else {
+            // 去的不是上面的路由 而是（home，search，shopcart。。。） 放行
+            next();
+        }
+         
         
     }
 

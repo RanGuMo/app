@@ -69,7 +69,12 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isAllCheck && cartInfoList.length>0" @change="updateAllCartChecked"/>
+        <input
+          class="chooseAll"
+          type="checkbox"
+          :checked="isAllCheck && cartInfoList.length > 0"
+          @change="updateAllCartChecked"
+        />
         <span>全选</span>
       </div>
       <div class="option">
@@ -84,7 +89,8 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <!-- <a class="sum-btn" href="###" @click="$router.push('/trade')">结算</a> -->
+          <router-link class="sum-btn" href="###" to="/trade">结算</router-link>
         </div>
       </div>
     </div>
@@ -191,16 +197,16 @@ export default {
     },
 
     // 修改全部商品的选中状态
-    async updateAllCartChecked(event){
-      let isChecked = event.target.checked ?"1":"0";
+    async updateAllCartChecked(event) {
+      let isChecked = event.target.checked ? "1" : "0";
       try {
         // 派发action
-      await this.$store.dispatch('updateAllCartIsChecked',isChecked);
+        await this.$store.dispatch("updateAllCartIsChecked", isChecked);
         this.getData();
       } catch (error) {
         alert(error.message);
       }
-    }
+    },
   },
   computed: {
     ...mapGetters(["cartList"]),
