@@ -1,24 +1,10 @@
-# app
-
-## Project setup
+# app 启动
+## 第一步:安装npm包
 ```
-yarn install
+cnpm i
 ```
-
-### Compiles and hot-reloads for development
+## 第二步:运行项目(确保node版本为v16.15.0):
 ```
-yarn serve
+npm run serve
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
