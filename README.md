@@ -4,6 +4,8 @@
 cnpm i
 ```
 ## 第二步:运行项目(确保node版本为v16.15.0):
+![1669184796863](https://user-images.githubusercontent.com/67958995/203484312-b91422c2-176d-4e3d-a1ea-9d454adf0c39.png)
+
 ```
 npm run serve
 ```
