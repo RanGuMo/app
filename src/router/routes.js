@@ -18,7 +18,7 @@ import GroupOrder from "@/pages/Center/groupOrder";
 export default [
     {
         path: "/center",
-        component: Center,
+        component: ()=>import("@/pages/Center"),
         meta: { show: true },
         // 二级路由组件
         children: [
@@ -37,12 +37,12 @@ export default [
     },
     {
         path: "/paysuccess",
-        component: PaySuccess,
+        component: ()=>import("@/pages/PaySuccess"),
         meta:{show:true}
     },
     {
         path: "/pay",
-        component: Pay,
+        component: ()=>import("@/pages/Pay"),
         meta: { show: true },
            // 路由独享守卫
            beforeEnter: (to, from, next) => {
@@ -56,7 +56,7 @@ export default [
     },
     {
         path: "/trade",
-        component: Trade,
+        component: ()=>import("@/pages/Trade"),
         meta: { show: true },
         // 路由独享守卫
         beforeEnter: (to, from, next) => {
@@ -70,18 +70,18 @@ export default [
     },
     {
         path: "/shopcart",
-        component: ShopCart,
+        component: ()=>import("@/pages/ShopCart"),
         meta:{show:true}
     },
     {
         path: "/addcartsuccess",
         name:"addcartsuccess",
-        component: AddCartSuccess,
+        component: ()=>import("@/pages/AddCartSuccess"),
         meta:{show:true}
     },
     {
         path: "/detail/:skuid",
-        component: Detail,
+        component: ()=>import("@/pages/Detail"),
         meta:{show:true}
     },
     {
@@ -94,18 +94,19 @@ export default [
     },
     {
         path: "/search/:keyword?",
-        component:Search,
+        component:()=>import("@/pages/Search"),
         meta: { show: true },
         name:"search"
     },
     {
         path: "/login",
-        component:Login,
+        component:()=>import("@/pages/Login"),
         meta:{show:false}
     },
     {
         path: "/register",
-        component:Register,
+        // 路由懒加载
+        component:()=>import("@/pages/Register"),
         meta:{show:false}
     },
     //重定向，当项目运行时，立马让其访问首页
